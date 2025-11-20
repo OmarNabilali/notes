@@ -80,3 +80,6 @@ and Firestore for storing notes linked to the user's UID.
 - Dark mode
 - Categories / tags
 - Option to attach images to notes
+
+
+![alt text](image.jpg)
