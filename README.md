@@ -83,3 +83,6 @@ and Firestore for storing notes linked to the user's UID.
 
 
 ![alt text](assets/images/WhatsApp%20Image%202025-11-20%20at%208.50.08%20PM.jpeg)
+![alt text](assets/images/WhatsApp%20Image%202025-11-20%20at%208.50.08%20PM.jpeg)
+![alt text](assets/images/WhatsApp%20Image%202025-11-20%20at%208.50.08%20PM.jpeg)
+![alt text](assets/images/WhatsApp%20Image%202025-11-20%20at%208.50.08%20PM.jpeg)
