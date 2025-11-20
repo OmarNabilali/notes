@@ -1,4 +1,4 @@
-# Note App – Flutter & Firebase
+_# Note App – Flutter & Firebase
 
 This is a simple notes application built with **Flutter** and connected to **Firebase**.  
 The app allows users to create an account, log in, and manage their personal notes easily.  
@@ -82,7 +82,7 @@ and Firestore for storing notes linked to the user's UID.
 - Option to attach images to notes
 
 
-![alt text](assets/images/WhatsApp%20Image%202025-11-20%20at%208.50.08%20PM.jpeg,width="300")
+![alt text](assets/images/WhatsApp%20Image%202025-11-20%20at%208.50.08%20PM.jpeg,width="100",height="100")
 ![alt text](assets/images/WhatsApp%20Image%202025-11-20%20at%208.50.08%20PM.jpeg)
 ![alt text](assets/images/WhatsApp%20Image%202025-11-20%20at%208.50.08%20PM.jpeg)
-![alt text](assets/images/WhatsApp%20Image%202025-11-20%20at%208.50.08%20PM.jpeg)
+![alt text](assets/images/WhatsApp%20Image%202025-11-20%20at%208.50.08%20PM.jpeg)_
