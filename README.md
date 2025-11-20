@@ -81,8 +81,19 @@ and Firestore for storing notes linked to the user's UID.
 - Categories / tags
 - Option to attach images to notes
 
+## Screenshots
 
-![alt text](assets/images/WhatsApp%20Image%202025-11-20%20at%208.50.08%20PM.jpeg,width="100",height="100")
-![alt text](assets/images/WhatsApp%20Image%202025-11-20%20at%208.50.08%20PM.jpeg)
-![alt text](assets/images/WhatsApp%20Image%202025-11-20%20at%208.50.08%20PM.jpeg)
-![alt text](assets/images/WhatsApp%20Image%202025-11-20%20at%208.50.08%20PM.jpeg)_
+### Login
+<img src="assets/images/WhatsApp Image 2025-11-20 at 8.50.08 PM.jpeg" width="300" />
+
+### Sign Up
+<img src="assets/images/WhatsApp Image 2025-11-20 at 8.50.08 PM (1).jpeg" width="300" />
+
+### Notes List
+<img src="assets/images/WhatsApp Image 2025-11-20 at 8.50.08 PM (2).jpeg" width="300" />
+
+### Add Note
+<img src="assets/images/WhatsApp Image 2025-11-20 at 8.50.08 PM (3).jpeg" width="300" />
+
+### Edit Note
+<img src="assets/images/WhatsApp Image 2025-11-20 at 8.50.09 PM.jpeg" width="300" />
