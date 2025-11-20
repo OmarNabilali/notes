@@ -39,7 +39,7 @@ Place your images inside a folder called **images** and update the paths below.
 ![Notes List](images/notes_list.png)
 
 ### Add Note
-![Add Note](assets/images/WhatsApp Image 2025-11-20 at 8.50.08 PM.jpeg,width="300")
+![Add Note](assets/images/WhatsApp Image 2025-11-20 at 8.50.08 PM.jpeg)
 
 ### Edit Note
 ![Edit Note](images/edit_note.png)
