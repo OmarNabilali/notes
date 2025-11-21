@@ -1,9 +1,12 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:firebase_auth/firebase_auth.dart'
-    show FirebaseAuth, FirebaseAuthException, UserCredential, GoogleAuthProvider;
-import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_app/cubits/login_cubit/login_cubit.dart';
+import 'package:note_app/cubits/signin_google_cubit/signin_google_cubit.dart';
+import 'package:note_app/cubits/signin_google_cubit/signin_google_state.dart';
+
+import '../../cubits/login_cubit/login_state.dart';
 import 'custom_button.dart';
 import 'custom_text_form.dart';
 
@@ -18,28 +21,7 @@ class _CustomFormState extends State<CustomForm> {
   TextEditingController emailCon = TextEditingController();
   TextEditingController passwordCon = TextEditingController();
   GlobalKey<FormState> formState = GlobalKey();
-  bool isLoading = false;
 
-
-  Future<void> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-if(googleUser==null){
-  return ;
-}
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-     await FirebaseAuth.instance.signInWithCredential(credential);
-     Navigator.pushReplacementNamed(context, 'home');
-  }
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -94,87 +76,116 @@ if(googleUser==null){
                 child: GestureDetector(child: Text('forget password?')),
               ),
               SizedBox(height: 25),
-
-              isLoading
-                  ? Center(child: CircularProgressIndicator())
-                  : CustomButton(
-                      color: Colors.orange,
-                      buttonName: Text(
-                        'Login',
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                      ),
-                      onPressed: () async {
-                        if (formState.currentState!.validate()) {
-                          isLoading = true;
-                          setState(() {});
-                          try {
-                            final credential = await FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                                  email: emailCon.text,
-                                  password: passwordCon.text,
-                                );
-                            isLoading = false;
-                            setState(() {});
-                            if (credential.user!.emailVerified) {
-                              Navigator.pushReplacementNamed(context, 'home');
-                            } else {
-                              FirebaseAuth.instance.currentUser!.sendEmailVerification();
-                              AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.warning,
-                                animType: AnimType.rightSlide,
-                                title:
-                                    'الرجاء التوجه لبريدك الالكتروني والضغط علي رابط التحقق',
-
-                                btnOkOnPress: () {},
-                              ).show();
+              BlocConsumer<LoginCubit, LoginState>(
+                builder: (context, state) {
+                  return state is LoadingLoginState
+                      ? Center(child: CircularProgressIndicator())
+                      : CustomButton(
+                          color: Colors.orange,
+                          buttonName: Text(
+                            'Login',
+                            style: TextStyle(fontSize: 18, color: Colors.white),
+                          ),
+                          onPressed: () async {
+                            if (formState.currentState!.validate()) {
+                              BlocProvider.of<LoginCubit>(
+                                context,
+                              ).loginEmailAndPassword(
+                                context,
+                                email: emailCon.text,
+                                password: passwordCon.text,
+                              );
                             }
-                          } on FirebaseAuthException catch (e) {
-                            if (e.code == 'user-not-found') {
-                              print('No user found for that email.');
-                            } else if (e.code == 'wrong-password') {
-                              print('Wrong password provided for that user.');
-                            }
-                            isLoading = false;
-                            setState(() {});
-                          }
-                        }
-                      },
-                    ),
+                          },
+                        );
+                },
+                listener: (context, state) {
+                  if (state is SuccessLoginState) {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      'home',
+                      (route) => false,
+                    );
+                  } else if (state is FailureLoginState) {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.info,
+                      animType: AnimType.rightSlide,
+
+                      desc: 'Login Failed',
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () {},
+                    )..show();
+                  }
+                },
+              ),
               SizedBox(height: 20),
 
-              CustomButton(
-                color: Colors.red,
-                onPressed: () {
-                   signInWithGoogle();
+              BlocConsumer<SignInGoogleCubit, SignInGoogleState>(
+                builder: (context, state) {
+                  return state is LoadingSignInGoogleState
+                      ? Center(child: CircularProgressIndicator())
+                      : CustomButton(
+                          color: Colors.red,
+                          onPressed: () {
+                            BlocProvider.of<SignInGoogleCubit>(
+                              context,
+                            ).loginGoogleSignIn(context);
+                          },
+                          buttonName: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Login With Google',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Image.asset(
+                                'assets/images/google.png',
+                                height: 30,
+                              ),
+                            ],
+                          ),
+                        );
                 },
-                buttonName: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Login With Google',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                    SizedBox(width: 10),
-                    Image.asset('assets/images/google.png', height: 30),
-                  ],
-                ),
+                listener: (context, state) {
+                  if (state is SuccessSignInGoogleState) {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      'home',
+                      (route) => false,
+                    );
+                  } else if (state is FailureSignInGoogleState) {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.info,
+                      animType: AnimType.rightSlide,
+
+                      desc: 'Google SignIn  Failed',
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () {},
+                    )..show();
+                  }
+                },
               ),
             ],
           ),
-SizedBox(height: 12,),
+          SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('dont have an Account? '),
               GestureDetector(
-                  onTap: (){
-                    Navigator.pushReplacementNamed(context, 'signin');
-                  },
-                  child: Text('Register',style: TextStyle(color: Colors.orange,),))
-              
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, 'signin');
+                },
+                child: Text('Register', style: TextStyle(color: Colors.orange)),
+              ),
             ],
-          )
+          ),
         ],
       ),
     );
